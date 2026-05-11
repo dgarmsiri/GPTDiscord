@@ -13,7 +13,6 @@ jobs:
 
     strategy:
       matrix:
-        # GPTDiscord requires Python 3.9+; we test the full supported range.
         python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
@@ -29,15 +28,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pytest pytest-cov
-          # Install GPTDiscord's own dependencies if requirements.txt exists
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Run tests with coverage
         run: |
-          pytest tests/test_gptdiscord.py -v --tb=short \
-            --cov=models \
-            --cov=services \
-            --cov=utils \
+          pytest test_gptdiscord.py -v --tb=short \
+            --cov=openai_model \
+            --cov=usage_service \
+            --cov=discord_utils \
             --cov-report=term-missing \
             --cov-report=xml:coverage.xml
 

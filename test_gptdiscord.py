@@ -75,10 +75,9 @@ import os
 import pytest
 
 # Allow imports from the project root whether tests/ is the cwd or not
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 # ── Imports from the modules under test ───────────────────────────────────────
-from models.openai_model import (
+from openai_model import (
     validate_temperature,          # Checks that a temperature is in [0.0, 2.0]
     validate_top_p,                # Checks that top_p is in [0.0, 1.0]
     validate_model,                # Checks model name is a supported identifier
@@ -100,7 +99,7 @@ from models.openai_model import (
     VALID_MODELS,                  # List of supported model name strings
 )
 
-from services.usage_service import (
+from usage_service import (
     UsageTracker,           # Per-user token usage counter
     get_default_settings,   # Returns a fresh copy of default bot settings
     apply_setting,          # Update one key in a settings dict
@@ -108,7 +107,7 @@ from services.usage_service import (
     get_model_for_settings, # Returns the effective model given settings
 )
 
-from utils.discord_utils import (
+from discord_utils import (
     is_valid_prompt,         # True if the string is non-empty after strip
     clean_discord_mention,   # Remove <@id> / <#id> mention syntax
     extract_command_args,    # Split "/cmd sub arg" into ("cmd sub", "arg")
@@ -625,7 +624,7 @@ class TestTruncateToTokenLimit:
         text = "a" * 4000  # 1000 tokens at 4 chars/token
         limit = 100
         result = truncate_to_token_limit(text, limit)
-        from models.openai_model import estimate_tokens
+        from openai_model import estimate_tokens
         assert estimate_tokens(result) <= limit
 
     def test_exact_limit_not_trimmed(self):
